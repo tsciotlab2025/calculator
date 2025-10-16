@@ -1,104 +1,91 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+let display = document.getElementById('display');
+
+// Append normal symbols
+function appendSymbol(symbol) {
+    display.value += symbol;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #1abc9c, #16a085);
+// Append functions like sin, cos, sinh, etc.
+function appendFunction(fn) {
+    display.value += fn + '(';
 }
 
-.calculator {
-    background-color: #f9f9f9;
-    border-radius: 25px;
-    padding: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    max-width: 420px;
-    width: 90%;
+function clearDisplay() {
+    display.value = '';
 }
 
-.display-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
 }
 
-#display {
-    width: 100%;
-    height: 60px;
-    font-size: 2rem;
-    border-radius: 15px;
-    border: none;
-    padding: 0 15px;
-    background-color: #fff;
-    color: #333;
-    text-align: right;
-    box-shadow: inset 0 3px 8px rgba(0,0,0,0.1);
-}
+function calculateResult() {
+    try {
+        // Replace % with /100
+        let expression = display.value.replace(/%/g, '/100');
 
-#voice-btn {
-    background: #1abc9c;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    color: #fff;
-    margin-left: 10px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: 0.2s;
-}
+        // Replace math functions with JS Math
+        expression = expression.replace(/sin/g, 'Math.sin')
+                               .replace(/cos/g, 'Math.cos')
+                               .replace(/tan/g, 'Math.tan')
+                               .replace(/log/g, 'Math.log')
+                               .replace(/sinh/g, 'Math.sinh')
+                               .replace(/cosh/g, 'Math.cosh')
+                               .replace(/tanh/g, 'Math.tanh');
 
-#voice-btn:hover {
-    background: #16a085;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 10px;
-}
-
-button {
-    padding: 20px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 15px;
-    background-color: #3498db;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: 0.2s;
-}
-
-button:hover {
-    background-color: #2980b9;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-@media (max-width: 480px) {
-    #display {
-        font-size: 1.5rem;
+        // Evaluate
+        display.value = eval(expression);
+    } catch (e) {
+        display.value = 'Error';
     }
+}
 
-    button {
-        padding: 15px;
-        font-size: 1rem;
+function calculateSqrt() {
+    try {
+        display.value = Math.sqrt(eval(display.value));
+    } catch (e) {
+        display.value = 'Error';
     }
+}
 
-    #voice-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
+// Voice Recognition
+const voiceBtn = document.getElementById('voice-btn');
+
+if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    voiceBtn.addEventListener('click', () => {
+        recognition.start();
+    });
+
+    recognition.onresult = function(event) {
+        let voiceInput = event.results[0][0].transcript;
+
+        // Convert spoken words to symbols
+        voiceInput = voiceInput.replace(/plus/gi, '+')
+                               .replace(/minus/gi, '-')
+                               .replace(/times|multiply/gi, '*')
+                               .replace(/divide/gi, '/')
+                               .replace(/percent/gi, '%')
+                               .replace(/square root/gi, 'Math.sqrt(')
+                               .replace(/power/gi, '**')
+                               .replace(/sine/gi, 'Math.sin(')
+                               .replace(/cosine/gi, 'Math.cos(')
+                               .replace(/tangent/gi, 'Math.tan(')
+                               .replace(/sinh/gi, 'Math.sinh(')
+                               .replace(/cosh/gi, 'Math.cosh(')
+                               .replace(/tanh/gi, 'Math.tanh(')
+                               .replace(/log/gi, 'Math.log(');
+
+        display.value += voiceInput;
+    };
+
+    recognition.onerror = function(event) {
+        alert('Voice recognition error: ' + event.error);
+    };
+} else {
+    voiceBtn.disabled = true;
+    voiceBtn.title = "Voice recognition not supported";
 }
