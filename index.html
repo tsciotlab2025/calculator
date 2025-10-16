@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart iOS-Style Calculator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="calculator">
+    <div class="display-container">
+        <input type="text" id="display" disabled placeholder="0">
+        <button id="voice-btn" title="Voice Input">🎤</button>
+    </div>
+
+    <div class="buttons">
+        <!-- Row 1 -->
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">DEL</button>
+        <button onclick="appendSymbol('%')">%</button>
+        <button onclick="appendSymbol('/')">÷</button>
+
+        <!-- Row 2 -->
+        <button onclick="appendSymbol('7')">7</button>
+        <button onclick="appendSymbol('8')">8</button>
+        <button onclick="appendSymbol('9')">9</button>
+        <button onclick="appendSymbol('*')">×</button>
+
+        <!-- Row 3 -->
+        <button onclick="appendSymbol('4')">4</button>
+        <button onclick="appendSymbol('5')">5</button>
+        <button onclick="appendSymbol('6')">6</button>
+        <button onclick="appendSymbol('-')">−</button>
+
+        <!-- Row 4 -->
+        <button onclick="appendSymbol('1')">1</button>
+        <button onclick="appendSymbol('2')">2</button>
+        <button onclick="appendSymbol('3')">3</button>
+        <button onclick="appendSymbol('+')">+</button>
+
+        <!-- Row 5 -->
+        <button onclick="appendSymbol('0')">0</button>
+        <button onclick="appendSymbol('.')">.</button>
+        <button onclick="calculateResult()">=</button>
+        <button onclick="calculateSqrt()">√</button>
+
+        <!-- Hyperbolic/Scientific -->
+        <button onclick="appendSymbol('Math.sin(')">sin</button>
+        <button onclick="appendSymbol('Math.cos(')">cos</button>
+        <button onclick="appendSymbol('Math.tan(')">tan</button>
+        <button onclick="appendSymbol('Math.log(')">ln</button>
+
+        <button onclick="appendSymbol('Math.sinh(')">sinh</button>
+        <button onclick="appendSymbol('Math.cosh(')">cosh</button>
+        <button onclick="appendSymbol('Math.tanh(')">tanh</button>
+        <button onclick="appendSymbol('**')">xʸ</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
