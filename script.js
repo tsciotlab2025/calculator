@@ -1,63 +1,86 @@
-let display = document.getElementById('display');
+const display = document.querySelector('.display');
+let expression = '';
+let angleMode = 'degrees'; // Default: degrees mode
 
-// Basic input functions
-function appendSymbol(symbol) {
-    display.value += symbol;
+function updateDisplay() {
+    display.textContent = expression || '0';
 }
 
-function clearDisplay() {
-    display.value = '';
-}
-
-function deleteLast() {
-    display.value = display.value.slice(0, -1);
-}
-
-function calculateResult() {
-    try {
-        let expression = display.value.replace(/%/g, '/100');
-        display.value = eval(expression);
-    } catch (e) {
-        display.value = 'Error';
+function preprocessExpression(expr) {
+    if (angleMode === 'degrees' && expr) {
+        try {
+            expr = expr.replace(/Math\.sin\$([^)]+)\$/g, 'Math.sin( ($1) * Math.PI / 180 )');
+            expr = expr.replace(/Math\.cos\$([^)]+)\$/g, 'Math.cos( ($1) * Math.PI / 180 )');
+            expr = expr.replace(/Math\.tan\$([^)]+)\$/g, 'Math.tan( ($1) * Math.PI / 180 )');
+            console.log('Preprocessed expression:', expr); // Debug log
+        } catch (error) {
+            console.error('Preprocessing error:', error);
+        }
     }
+    return expr;
 }
 
-function calculateSqrt() {
-    try {
-        display.value = Math.sqrt(eval(display.value));
-    } catch (e) {
-        display.value = 'Error';
-    }
-}
+document.querySelectorAll('.buttons button').forEach(button => {
+    button.addEventListener('click', () => {
+        const value = button.textContent;
+        const func = button.dataset.func;
 
-// Voice Recognition
-const voiceBtn = document.getElementById('voice-btn');
+        if (func) {
+            expression += func;  // Add function string
+        } else if (value === '=') {
+            if (expression) {  // Only evaluate if expression is not empty
+                try {
+                    const processedExpr = preprocessExpression(expression);
+                    expression = eval(processedExpr).toString();
+                } catch (error) {
+                    console.error('Evaluation error:', error);
+                    expression = 'Error';
+                }
+            }
+        } else if (value === 'AC') {
+            expression = '';
+        } else if (value === 'DEL') {
+            expression = expression.slice(0, -1);
+        } else if (value === '+/-') {
+            expression = expression.startsWith('-') ? expression.slice(1) : '-' + expression;  // Improved toggle
+        } else if (value === 'Deg/Rad') {
+            angleMode = (angleMode === 'degrees') ? 'radians' : 'degrees';
+            button.textContent = angleMode === 'degrees' ? 'Deg/Rad' : 'Rad/Deg';
+            // Do not add to expression
+        } else {
+            expression += value.replace('×', '*').replace('÷', '/');
+        }
+        updateDisplay();
+    });
+});
 
-if ('webkitSpeechRecognition' in window) {
-    const recognition = new webkitSpeechRecognition();
+// Voice Input Functionality
+if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'en-US';
-    recognition.continuous = false;
     recognition.interimResults = false;
 
-    voiceBtn.addEventListener('click', () => {
-        recognition.start();
+    recognition.addEventListener('result', e => {
+        const transcript = e.results[0][0].transcript.trim().toLowerCase();
+        let processed = transcript
+            .replace(/plus/gi, '+')
+            .replace(/minus/gi, '-')
+            .replace(/times/gi, '*')
+            .replace(/multiplied by/gi, '*')
+            .replace(/divided by/gi, '/')
+            .replace(/to the power of/gi, '**')
+            .replace(/power/gi, '**')
+            .replace(/percentage/gi, '%');
+        expression += processed + ' ';
+        updateDisplay();
+        console.log('Voice input added:', processed);  // Debug log
     });
 
-    recognition.onresult = function(event) {
-        let voiceInput = event.results[0][0].transcript;
-        voiceInput = voiceInput.replace(/plus/gi, '+')
-                               .replace(/minus/gi, '-')
-                               .replace(/times|multiply/gi, '*')
-                               .replace(/divide/gi, '/')
-                               .replace(/percent/gi, '%')
-                               .replace(/square root/gi, 'Math.sqrt(');
-        display.value += voiceInput;
-    };
-
-    recognition.onerror = function(event) {
-        alert('Voice recognition error: ' + event.error);
-    };
+    document.getElementById('voiceBtn').addEventListener('click', () => {
+        recognition.start();
+        console.log('Listening...');
+    });
 } else {
-    voiceBtn.disabled = true;
-    voiceBtn.title = "Voice recognition not supported";
+    document.getElementById('voiceBtn').textContent = 'Voice Not Supported';
+    document.getElementById('voiceBtn').disabled = true;
 }
