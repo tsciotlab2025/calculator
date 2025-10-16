@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart iOS-Style Calculator</title>
+<title>Smart Hyperbolic Calculator</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -44,15 +44,15 @@
         <button onclick="calculateResult()">=</button>
         <button onclick="calculateSqrt()">√</button>
 
-        <!-- Hyperbolic/Scientific -->
-        <button onclick="appendSymbol('Math.sin(')">sin</button>
-        <button onclick="appendSymbol('Math.cos(')">cos</button>
-        <button onclick="appendSymbol('Math.tan(')">tan</button>
-        <button onclick="appendSymbol('Math.log(')">ln</button>
+        <!-- Scientific / Hyperbolic -->
+        <button onclick="appendFunction('sin')">sin</button>
+        <button onclick="appendFunction('cos')">cos</button>
+        <button onclick="appendFunction('tan')">tan</button>
+        <button onclick="appendFunction('log')">ln</button>
 
-        <button onclick="appendSymbol('Math.sinh(')">sinh</button>
-        <button onclick="appendSymbol('Math.cosh(')">cosh</button>
-        <button onclick="appendSymbol('Math.tanh(')">tanh</button>
+        <button onclick="appendFunction('sinh')">sinh</button>
+        <button onclick="appendFunction('cosh')">cosh</button>
+        <button onclick="appendFunction('tanh')">tanh</button>
         <button onclick="appendSymbol('**')">xʸ</button>
     </div>
 </div>
