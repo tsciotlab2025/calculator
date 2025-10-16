@@ -1,62 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Hyperbolic Calculator</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Style Smart Calculator</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to CSS file -->
 </head>
 <body>
-<div class="calculator">
-    <div class="display-container">
-        <input type="text" id="display" disabled placeholder="0">
-        <button id="voice-btn" title="Voice Input">🎤</button>
+    <div class="calculator">
+        <div class="display">0</div>
+        <div class="buttons">
+            <!-- Row 1 -->
+            <button data-func="">AC</button>
+            <button data-func="">+/-</button>
+            <button data-func="">%</button>
+            <button class="sci" data-func="Math.sqrt(">√</button>
+            
+            <!-- Row 2 -->
+            <button data-func="">7</button>
+            <button data-func="">8</button>
+            <button data-func="">9</button>
+            <button data-func="/">÷</button>
+            
+            <!-- Row 3 -->
+            <button data-func="">4</button>
+            <button data-func="">5</button>
+            <button data-func="">6</button>
+            <button data-func="*">×</button>
+            
+            <!-- Row 4 -->
+            <button data-func="">1</button>
+            <button data-func="">2</button>
+            <button data-func="">3</button>
+            <button data-func="-">-</button>
+            
+            <!-- Row 5 -->
+            <button data-func="">0</button>
+            <button data-func="">.</button>
+            <button data-func="">=</button>
+            <button data-func="+">+</button>
+            
+            <!-- Row 6 -->
+            <button class="sci" data-func="Math.sin(">sin°</button>
+            <button class="sci" data-func="Math.cos(">cos°</button>
+            <button class="sci" data-func="Math.tan(">tan°</button>
+            <button class="sci" data-func="Math.log(">ln</button>
+            
+            <!-- Row 7 -->
+            <button class="sci" data-func="Math.sinh(">sinh</button>
+            <button class="sci" data-func="Math.cosh(">cosh</button>
+            <button class="sci" data-func="Math.tanh(">tanh</button>
+            <button data-func="**">xʸ</button>
+            
+            <!-- Row 8 -->
+            <button data-func="(">(</button>
+            <button data-func=")">)</button>
+            <button data-func="">DEL</button>
+            <button id="modeBtn" data-func="">Deg/Rad</button>
+        </div>
+        <button id="voiceBtn">Voice Input</button>
     </div>
-
-    <div class="buttons">
-        <!-- Row 1 -->
-        <button onclick="clearDisplay()">C</button>
-        <button onclick="deleteLast()">DEL</button>
-        <button onclick="appendSymbol('%')">%</button>
-        <button onclick="appendSymbol('/')">÷</button>
-
-        <!-- Row 2 -->
-        <button onclick="appendSymbol('7')">7</button>
-        <button onclick="appendSymbol('8')">8</button>
-        <button onclick="appendSymbol('9')">9</button>
-        <button onclick="appendSymbol('*')">×</button>
-
-        <!-- Row 3 -->
-        <button onclick="appendSymbol('4')">4</button>
-        <button onclick="appendSymbol('5')">5</button>
-        <button onclick="appendSymbol('6')">6</button>
-        <button onclick="appendSymbol('-')">−</button>
-
-        <!-- Row 4 -->
-        <button onclick="appendSymbol('1')">1</button>
-        <button onclick="appendSymbol('2')">2</button>
-        <button onclick="appendSymbol('3')">3</button>
-        <button onclick="appendSymbol('+')">+</button>
-
-        <!-- Row 5 -->
-        <button onclick="appendSymbol('0')">0</button>
-        <button onclick="appendSymbol('.')">.</button>
-        <button onclick="calculateResult()">=</button>
-        <button onclick="calculateSqrt()">√</button>
-
-        <!-- Scientific / Hyperbolic -->
-        <button onclick="appendFunction('sin')">sin</button>
-        <button onclick="appendFunction('cos')">cos</button>
-        <button onclick="appendFunction('tan')">tan</button>
-        <button onclick="appendFunction('log')">ln</button>
-
-        <button onclick="appendFunction('sinh')">sinh</button>
-        <button onclick="appendFunction('cosh')">cosh</button>
-        <button onclick="appendFunction('tanh')">tanh</button>
-        <button onclick="appendSymbol('**')">xʸ</button>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script> <!-- Link to JS file -->
 </body>
 </html>
